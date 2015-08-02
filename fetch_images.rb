@@ -20,10 +20,12 @@ text_files.each do |text_file|
       dirname = "images/#{type}"
       Dir.mkdir(dirname) unless Dir.exist? dirname
       File.open("images/#{type}/#{name}", 'wb') do |fo|
-        fo.write open(target_url).read
+        begin
+          fo.write open(target_url).read
+        rescue => e
+          puts e.message
+        end
       end
     end
   end
-
-  binding.pry
 end
