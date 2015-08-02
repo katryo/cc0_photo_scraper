@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fetch": "casperjs main.js"
+    "fetch": "casperjs index.js"
   },
   "author": "",
   "license": "ISC",
