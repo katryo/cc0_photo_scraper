@@ -21,29 +21,32 @@ targets.forEach(function(query, index, array) {
       casper.then(function() {
         this.wait(1000);
         srcs = this.evaluate(function() {
-          window.scrollBy(0, 1000);
+          window.scroll(0, 10000);
           var images = document.getElementsByTagName('img');
-          var src_list = [];
+          var srcList = [];
           for (var i = 0; i < images.length; i++) {
-            src_list.push(images[i].src);
+            srcList.push(images[i].src);
           }
-          return src_list;
+          return srcList;
         });
+        casper.log(srcs.length, "debug");
       });
-      if (srcs.length === maxNumOfImages) {
-        break;
-      }
+      // if (srcs.length === maxNumOfImages) {
+      //   casper.log("zero zero", "debug");
+      //   break;
+      // }
       maxNumOfImages = srcs.length;
       console.log('looping...');
     };
   });
 
   casper.then(function() {
+    casper.log(srcs.length, "debug");
     var f = fs.open('results/' + query + '.txt', 'w');
     f.write(srcs.join('\n'));
     f.close();
   });
 
-  casper.run();
-
 });
+
+casper.run();
