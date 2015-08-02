@@ -7,14 +7,20 @@ text_files.each do |text_file|
   urls = content.split("\n")
   urls.each do |url|
     if url.start_with? 'https://static.pexels.com/photos/'
-      name = String.new
-      target_url = url.sub(/(.*?)\/(\d+)\/(.*?)-medium(.*?)/) do
-        name = $3 + '-' + $2 + $4
-        $1 + '/' + $2 +  '/' + $3 + $4
+      name = ''
+      target_url = url.sub(/(.*?)\/(\d+)\/(.*?)-medium(.*$)/) do
+        extention = Regexp.last_match(4)
+        extention = '.jpg' if extention == '.jpeg'
+        name = Regexp.last_match(3) + '-' + Regexp.last_match(2) + extention
+        Regexp.last_match(1) + '/' + Regexp.last_match(2) + '/' + Regexp.last_match(3) + Regexp.last_match(4)
       end
-      sleep 1
-      File.open('images/' + name, 'wb') do |fo|
-        fo.write open(fo).read
+      puts name
+      sleep 2
+      type = text_file.match(/results\/(.*?)\.txt$/) { Regexp.last_match(1) }
+      dirname = "images/#{type}"
+      Dir.mkdir(dirname) unless Dir.exist? dirname
+      File.open("images/#{type}/#{name}", 'wb') do |fo|
+        fo.write open(target_url).read
       end
     end
   end
